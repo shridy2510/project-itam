@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AssetDisplayDto {
-    private long assetTag;
+    private String assetTag;
     private String name;
     private String serial;
     private String modelName;

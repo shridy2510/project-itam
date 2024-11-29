@@ -13,6 +13,8 @@ public class UserDisplayDto {
     private String email;
     private String userName;
     private String userId;
+    private Long id;
+    private String phoneNumber;
     private Set<String> roles;
 
 

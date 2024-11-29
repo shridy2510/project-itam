@@ -21,9 +21,6 @@ public class KeycloakUtilSecurity {
     private String username;
     @Value("${password}")
     private String password;
-    @Value("${clientSecret}")
-    private String secret;
-
 
     public Keycloak KeycloakInstance(){
         if (this.keycloak == null){
@@ -34,8 +31,6 @@ public class KeycloakUtilSecurity {
                     .grantType(grantType)
                     .username(username)
                     .password(password)
-                    .clientSecret(secret)
-                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .build();
         }
         return keycloak;

@@ -17,16 +17,17 @@ import java.time.LocalDateTime;
 @Setter
 public class AssetDto {
     private long id;
-    private long assetTag;
+    private String assetTag;
     private String name;
     private String serial;
     private Long model_id;
     private Long company_id;
     private Long status_id;
-    private Long assignedUser_id;
+    private String assignedUser_id;
     private String description;
     private LocalDateTime lastCheckout;
     private LocalDateTime expectedCheckin;
+    private double cost;
 }
 
 

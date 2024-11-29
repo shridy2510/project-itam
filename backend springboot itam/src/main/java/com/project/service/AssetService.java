@@ -41,7 +41,7 @@ public class AssetService {
         Optional<ModelEntity> optModelEntity= modelRepository.findById(assetDto.getModel_id());
         AssetEntity assetEntity = new AssetEntity();
         if(assetDto.getAssignedUser_id()!=null){
-        Optional<UserEntity> optUserEntity= userRepository.findById(assetDto.getAssignedUser_id());
+        Optional<UserEntity> optUserEntity= userRepository.findByUserId(assetDto.getAssignedUser_id());
             if (optUserEntity.isPresent() ) {
                 UserEntity userEntity = optUserEntity.get();
                 assetEntity.setUserEntity(userEntity);
@@ -59,6 +59,7 @@ public class AssetService {
             assetEntity.setCompanyEntity(companyEntity);
             assetEntity.setStatusEntity(statusEntity);
             assetEntity.setModelEntity(modelEntity);
+            assetEntity.setCost(assetDto.getCost());
 
             assetEntity.setLastCheckout(assetDto.getLastCheckout());
             assetEntity.setExpectedCheckin(assetDto.getExpectedCheckin());
@@ -77,7 +78,7 @@ public class AssetService {
         AssetEntity assetEntity = new AssetEntity();
         if(optAssetEntity.isPresent()){
             if(assetDto.getAssignedUser_id()!=null){
-                Optional<UserEntity> optUserEntity= userRepository.findById(assetDto.getAssignedUser_id());
+                Optional<UserEntity> optUserEntity= userRepository.findByUserId(assetDto.getAssignedUser_id());
                 if (optUserEntity.isPresent() ) {
                     UserEntity userEntity = optUserEntity.get();
                     assetEntity.setUserEntity(userEntity);
@@ -92,10 +93,11 @@ public class AssetService {
                 assetEntity.setName(assetDto.getName());
                 assetEntity.setAssetTag(assetDto.getAssetTag());
                 assetEntity.setDescription(assetDto.getDescription());
-                assetEntity.setSerial(assetDto.getSerial());
                 assetEntity.setCompanyEntity(companyEntity);
                 assetEntity.setStatusEntity(statusEntity);
                 assetEntity.setModelEntity(modelEntity);
+                assetEntity.setSerial(assetDto.getSerial());
+                assetEntity.setCost(assetDto.getCost());
 
                 assetEntity.setLastCheckout(assetDto.getLastCheckout());
                 assetEntity.setExpectedCheckin(assetDto.getExpectedCheckin());
@@ -123,6 +125,12 @@ public class AssetService {
                 .map(Mapper::toAssetDisplayDto)
                 .collect(Collectors.toList());
 
+
+    }
+
+
+    public double returnAssetsValue(){
+        return 0.120;
 
     }
 

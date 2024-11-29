@@ -31,7 +31,6 @@ public class Mapper {
         AssetDisplayDto assetDisplayDto = new AssetDisplayDto();
         assetDisplayDto.setAssetTag(assetEntity.getAssetTag());
         assetDisplayDto.setName(assetEntity.getName());
-        assetDisplayDto.setSerial(assetEntity.getSerial());
         assetDisplayDto.setModelName(assetEntity.getModelEntity().getName());
         assetDisplayDto.setCompanyName(assetEntity.getCompanyEntity().getName());
         assetDisplayDto.setStatus(assetEntity.getStatusEntity().getName());
@@ -58,6 +57,8 @@ public class Mapper {
         userDisplayDto.setLastName(userEntity.getLastName());
         userDisplayDto.setRoles(convertRolesToRoleNames(userEntity.getRoles()));
         userDisplayDto.setUserName(userEntity.getUsername());
+        userDisplayDto.setPhoneNumber(userEntity.getPhoneNumber());
+
         return userDisplayDto;
 
 

@@ -16,8 +16,9 @@ public class AssetEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private long assetTag;
+    private String assetTag;
     private String serial;
+    private double cost;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "model_id")
     private ModelEntity modelEntity;

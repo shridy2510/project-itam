@@ -3,7 +3,6 @@ import com.project.displayDto.UserDisplayDto;
 import com.project.dto.TokenDto;
 import com.project.dto.UserDto;
 import com.project.repository.UserRepository;
-import com.project.repository.entities.UserEntity;
 import com.project.service.UserService;
 import com.project.util.CheckRole;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +30,6 @@ public class UserController {
     private String clientId;
     @Value("${grant-type}")
     private String grantType;
-    @Value("${clientSecret}")
-    private String clientSecret;
     @Autowired
     private CheckRole checkRole;
 
@@ -79,7 +76,6 @@ public class UserController {
 //tạo user mới
     @PostMapping("/create/user")
     @PreAuthorize("hasRole('Admin')")
-
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto,HttpServletRequest request) {
 //        if(checkRole.checkRoleAdmin(request)) {
             try{userService.createUser(userDto);
@@ -94,8 +90,6 @@ public class UserController {
     //đổi thông tin user
     @PutMapping("/update/users")
     @PreAuthorize("hasRole('Admin') or hasRole('User')")
-
-
     public ResponseEntity<String> update(@RequestBody UserDto userDto, HttpServletRequest request) {
 
 
@@ -120,9 +114,34 @@ public class UserController {
     //logout keycloak session
     @PostMapping("/keycloak/logout")
 
-    public ResponseEntity<?> logout(@RequestBody TokenDto tokenDto,HttpServletRequest request) {
-        return userService.logout(tokenDto);
+    public ResponseEntity<String> logout(@RequestBody TokenDto tokenDto,HttpServletRequest request) {
+        userService.logout(tokenDto);
+        return ResponseEntity.ok("User logout successfully");
 
+
+    }
+    //lấy list thông tin của 1 user
+    @GetMapping("/getUserInfo")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request,@RequestParam String input) {
+        System.out.println("Received input: " + input);
+
+        return ResponseEntity.ok(userService.getUserInfoFromDb(input));
+
+    }
+
+    @GetMapping("/getUserInfo/userId")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
+    public ResponseEntity<?> getUserInfoById(HttpServletRequest request,@RequestParam String UserId) {
+        System.out.println("Received input: " + UserId);
+
+        return ResponseEntity.ok(userService.getUserInfoById(UserId));}
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
+    public ResponseEntity<?> changePassword(@RequestBody UserDto userDto, HttpServletRequest request) {
+         userService.updatePassword(userDto);
+         return ResponseEntity.ok("Password changed successfully");
 
     }
 
@@ -137,4 +156,6 @@ public class UserController {
 
 
 
-}
+
+
+    }
