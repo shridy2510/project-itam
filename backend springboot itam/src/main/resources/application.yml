@@ -47,10 +47,10 @@ client-id: son-rest-api
 grant-type: password
 name: son
 password: son
-clientSecret: 8phqGCaBpfnLpLAyQXba759feurpu2l7
+
 
 fixed-data:
-  statutype:
+  statustype:
     - Deployable
     - Pending
     - Undeployable
@@ -67,6 +67,7 @@ fixed-data:
     - Create
     - Checkin
     - Checkout
+
 
 
 

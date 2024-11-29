@@ -21,6 +21,7 @@ public class UserEntity {
     private String username;
     private String email;
     private String firstName;
+    private String phoneNumber;
     private String lastName;
     @ManyToMany(fetch=FetchType.EAGER,cascade = { CascadeType.PERSIST, CascadeType.MERGE, })
 

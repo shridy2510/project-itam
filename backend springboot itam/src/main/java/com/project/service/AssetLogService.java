@@ -36,9 +36,9 @@ public class AssetLogService {
     public void createAssetLog(AssetLogDto assetLogDto){
         AssetLogEntity assetLogEntity = new AssetLogEntity();
         Optional<AssetEntity> assetEntityOptional = assetRepository.findById(assetLogDto.getAsset_id());
-        Optional<UserEntity> adminOptional = userRepository.findById(assetLogDto.getAdmin_id());
+        Optional<UserEntity> adminOptional = userRepository.findByUserId(assetLogDto.getAdmin_id());
         if(assetLogDto.getUser_id()!=null){
-        Optional<UserEntity> userOptional =userRepository.findById(assetLogDto.getUser_id());
+        Optional<UserEntity> userOptional =userRepository.findByUserId(assetLogDto.getUser_id());
         if(userOptional.isPresent()){
             UserEntity user = userOptional.get();
             assetLogEntity.setUser(user);
@@ -63,11 +63,11 @@ public class AssetLogService {
     public void updateAssetLog(AssetLogDto assetLogDto){
         Optional<AssetLogEntity> assetLogOptional = assetLogRepository.findById(assetLogDto.getId());
         Optional<AssetEntity> assetEntityOptional = assetRepository.findById(assetLogDto.getAsset_id());
-        Optional<UserEntity> adminOptional = userRepository.findById(assetLogDto.getAdmin_id());
+        Optional<UserEntity> adminOptional = userRepository.findByUserId(assetLogDto.getAdmin_id());
         if(assetLogOptional.isPresent()){
             AssetLogEntity assetLogEntity = assetLogOptional.get();
             if(assetLogDto.getUser_id()!=null){
-                Optional<UserEntity> userOptional =userRepository.findById(assetLogDto.getUser_id());
+                Optional<UserEntity> userOptional =userRepository.findByUserId(assetLogDto.getUser_id());
                 if(userOptional.isPresent()){
                     UserEntity user = userOptional.get();
                     assetLogEntity.setUser(user);

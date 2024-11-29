@@ -10,6 +10,7 @@ import com.project.repository.entities.UserEntity;
 import com.project.security.KeycloakUtilSecurity;
 import com.project.repository.UserRepository;
 import com.project.util.Mapper;
+import com.project.util.checkValidEmail;
 import jakarta.transaction.Transactional;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.ClientResource;
@@ -35,6 +36,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.project.util.Mapper.convertRolesToRoleNames;
+
 @Service
 public class UserService {
     @Value("${realm}")
@@ -45,8 +48,6 @@ public class UserService {
     private String clientId;
     @Value("${grant-type}")
     private String grantType;
-    @Value("${clientSecret}")
-    private String clientSecret;
 
 
     @Autowired
@@ -61,20 +62,26 @@ public class UserService {
     @Transactional
     public void updateUser(UserDto userDto) {
         //update keycloak
+        try{
         Keycloak keycloak = keycloakUtilSecurity.KeycloakInstance();
         UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEmail(userDto.getEmail());
+        if(userDto.getEmail() != null) {userRepresentation.setEmail(userDto.getEmail());}
         userRepresentation.setFirstName(userDto.getFirstName());
         userRepresentation.setLastName(userDto.getLastName());
-        userRepresentation.setUsername(userDto.getUserName());
+        if(userDto.getUserName()!=null) {userRepresentation.setUsername(userDto.getUserName());}
         List<CredentialRepresentation> credentials = new ArrayList<>();
         CredentialRepresentation cred = new CredentialRepresentation();
-        cred.setTemporary(false);
-        cred.setValue(userDto.getPassword());
-        credentials.add(cred);
-        userRepresentation.setCredentials(credentials);
+        if(userDto.getPassword() != null) {
+            cred.setTemporary(false);
+            cred.setValue(userDto.getPassword());
+            credentials.add(cred);
+            userRepresentation.setCredentials(credentials);}
         userRepresentation.setEnabled(true);
-        keycloak.realm(realm).users().get(userDto.getUserId()).update(userRepresentation);
+        keycloak.realm(realm).users().get(userDto.getUserId()).update(userRepresentation);}
+        catch(Exception e ){
+            System.out.println(e.getMessage());
+
+        }
 
         //updateDb
         Optional<UserEntity> optionalUser = userRepository.findByUserId(userDto.getUserId());
@@ -84,8 +91,9 @@ public class UserService {
             if(userDto.getUserName()!=null){
             userEntity.setUsername(userDto.getUserName());}
             if(userDto.getEmail()!=null){userEntity.setEmail(userDto.getEmail());}
-            if(userDto.getLastName()!=null){userEntity.setLastName(userDto.getLastName());}
-            if(userDto.getFirstName()!=null){userEntity.setFirstName(userDto.getFirstName());}
+            userEntity.setLastName(userDto.getLastName());
+           userEntity.setFirstName(userDto.getFirstName());
+           userEntity.setPhoneNumber(userDto.getPhoneNumber());
             if(userDto.getRoles()!=null){
                 Set<RoleEntity> roles = roleRepository.findByRoleIn(userDto.getRoles());
                 userEntity.setRoles(roles);}
@@ -98,6 +106,36 @@ public class UserService {
 
 
     }
+    public void updatePassword(UserDto userDto) {
+        try {
+            Keycloak keycloak = keycloakUtilSecurity.KeycloakInstance();
+            UserRepresentation userRepresentation = new UserRepresentation();
+            List<CredentialRepresentation> credentials = new ArrayList<>();
+            CredentialRepresentation cred = new CredentialRepresentation();
+
+            // Check if the new password is provided and if the old password matches
+            if (userDto.getPassword() != null ) {
+                cred.setTemporary(false);
+                cred.setValue(userDto.getPassword()); // Set the new password
+                credentials.add(cred); // Add the new password to the credentials list
+                userRepresentation.setCredentials(credentials); // Set the updated credentials
+                userRepresentation.setEnabled(true); // Enable the user
+                // Update the user in Keycloak
+                keycloak.realm(realm).users().get(userDto.getUserId()).update(userRepresentation);
+            } else {
+                throw new IllegalArgumentException(" new password is not provided.");
+            }
+        } catch (Exception e) {
+            // Log the error and rethrow as needed
+            System.out.println("Error updating password: " + e.getMessage());
+            // Optionally, throw a more specific exception if needed
+            throw new RuntimeException("Password update failed.", e);
+        }
+    }
+
+
+
+
     @Transactional
     public void deleteUser(UserDto userDto) {
         //xoá keycloak
@@ -110,6 +148,14 @@ public class UserService {
     }
     @Transactional
     public void createUser(UserDto userDto) {
+        //lập trong db
+        //check trùng userName và Gmail
+        if(userRepository.existsByUsername(userDto.getUserName())){
+            throw new RuntimeException("UserName already exists");
+        }
+        if(userRepository.existsByEmail(userDto.getEmail()) ){
+            throw new RuntimeException("Email already exists");
+        }
 
         //lạp tk keycloak
         Keycloak keycloak = keycloakUtilSecurity.KeycloakInstance();
@@ -128,14 +174,7 @@ public class UserService {
         newUser.setCredentials(credentials);
         usersResource.create(newUser);
 
-        //lập trong db
-        //check trùng userName và Gmail
-        if(userRepository.existsByUsername(userDto.getUserName())){
-            throw new RuntimeException("UserName already exists");
-        }
-        if(userRepository.existsByEmail(userDto.getEmail()) ){
-            throw new RuntimeException("Email already exists");
-        }
+
         // lấy id vừa tạo
         UserRepresentation user=usersResource.search(userDto.getUserName()).get(0);
         //lưu vào db
@@ -147,6 +186,7 @@ public class UserService {
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setUserId(user.getId());
         userEntity.setRoles(setRoles);
+        userEntity.setPhoneNumber(userDto.getPhoneNumber());
         userRepository.save(userEntity);
 
 
@@ -211,6 +251,65 @@ public class UserService {
 
     }
 
+    public UserDisplayDto getUserInfoFromDb(String input) {
+        boolean validEmail = checkValidEmail.isValidEmail(input);
+        Optional<UserEntity> response;
+
+        if (validEmail) {
+            response = userRepository.findByEmail(input);
+        } else {
+            response = userRepository.findByUsername(input);
+        }
+
+        if (response.isPresent()) {
+            UserEntity userEntity = response.get();
+
+            UserDisplayDto userDto = new UserDisplayDto();
+            userDto.setUserId(userEntity.getUserId());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setPhoneNumber(userEntity.getPhoneNumber());
+            userDto.setId(userEntity.getId());
+            userDto.setUserName(userEntity.getUsername());
+            userDto.setRoles(convertRolesToRoleNames(userEntity.getRoles()));
+
+
+
+            return userDto;
+        }
+        System.out.println("có vấn đề");
+        return null ;}
+
+
+        public UserDisplayDto getUserInfoById(String userId) {
+
+            Optional<UserEntity> response;
+            response = userRepository.findByUserId(userId);
+            if (response.isPresent()) {
+                UserEntity userEntity = response.get();
+
+                UserDisplayDto userDto = new UserDisplayDto();
+                userDto.setUserId(userEntity.getUserId());
+                userDto.setFirstName(userEntity.getFirstName());
+                userDto.setLastName(userEntity.getLastName());
+                userDto.setEmail(userEntity.getEmail());
+                userDto.setPhoneNumber(userEntity.getPhoneNumber());
+                userDto.setId(userEntity.getId());
+                userDto.setUserName(userEntity.getUsername());
+                userDto.setRoles(convertRolesToRoleNames(userEntity.getRoles()));
+
+                return userDto;
+            }
+            System.out.println("có vấn đề");
+            return null ;
+
+
+    }
+
+
+
+
 
     public ResponseEntity<?> login(UserDto userDto) {
         RestTemplate restTemplate = new RestTemplate();
@@ -219,7 +318,6 @@ public class UserService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("client_id", clientId);
-        map.add("client_secret", clientSecret);
         map.add("grant_type", grantType);
         map.add("username", userDto.getUserName());
         map.add("password", userDto.getPassword());
@@ -243,12 +341,11 @@ public class UserService {
     public ResponseEntity<?> logout(TokenDto tokenDto) {
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/logout";;
+        String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("client_id", clientId);
-        map.add("client_secret", clientSecret);
         map.add("refresh_token",tokenDto.getRefresh_token());
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         restTemplate.postForEntity(url, request, Object.class);

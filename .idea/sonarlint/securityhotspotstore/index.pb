@@ -139,3 +139,13 @@ m
 =backend springboot itam/.mvn/wrapper/maven-wrapper.properties,e/f/ef318a3950c9d4143d0cb0c6a60eab1bc001d2df
 â
 Ybackend springboot itam/src/test/java/com/project/controller/ProjectApplicationTests.java,d/7/d74e4da887d4a34c405ad4412a268c9b590e3587
+è
+_backend springboot itam/src/main/java/com/project/repository/entities/RequestedAssetEntity.java,d/b/db1a4b1e88c014afb41a7acb039a29db6d6e1d79
+ä
+Zbackend springboot itam/src/main/java/com/project/repository/RequestedAssetRepository.java,8/9/89e510eda9ad49b9ee8cc757662a35b1f71a7d01
+Ñ
+Tbackend springboot itam/src/main/java/com/project/service/RequestedAssetService.java,d/e/de9510e93a628e6a59c1324c558d98c791ec6fea
+|
+Lbackend springboot itam/src/main/java/com/project/dto/RequestedAssetDto.java,8/9/895cd17efe7154fa6ed8495c6668b8170c0b05c6
+ä
+Zbackend springboot itam/src/main/java/com/project/controller/RequestedAssetController.java,5/f/5f0da9ae3e32c4e20d47d98da3a1298b2a0f1d74

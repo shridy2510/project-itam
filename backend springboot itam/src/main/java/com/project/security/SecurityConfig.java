@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
 //                       .requestMatchers("/keycloak/**").hasRole("User")
-                            .anyRequest().authenticated());
+                        .anyRequest().authenticated());
 
 
         http
