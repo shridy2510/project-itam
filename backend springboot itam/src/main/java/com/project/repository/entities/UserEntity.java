@@ -38,6 +38,8 @@ public class UserEntity {
     @OneToMany(mappedBy= "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssetLogEntity> assetLogUser;
 
+    private String avatarPath;
+
 
 
 

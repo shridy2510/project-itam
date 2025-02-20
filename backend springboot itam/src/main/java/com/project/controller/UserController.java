@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @RestController
@@ -143,6 +144,19 @@ public class UserController {
          userService.updatePassword(userDto);
          return ResponseEntity.ok("Password changed successfully");
 
+    }
+
+    @PutMapping("/saveAvatar")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
+    public ResponseEntity<?> changeAvatar(@RequestParam String UserId, MultipartFile file, HttpServletRequest request) {
+        try{userService.saveAvatar(UserId,file);
+        return ResponseEntity.ok("Avatar changed successfully");}
+        catch(Exception e){return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());}
+    }
+    @GetMapping("/getAvatarPath")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
+    public ResponseEntity<String> getAvatarPath(@RequestParam String UserId,HttpServletRequest request) {
+        return ResponseEntity.ok(userService.getAvatarPath(UserId));
     }
 
 
