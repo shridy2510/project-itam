@@ -32,7 +32,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +53,10 @@ public class UserService {
     private String clientId;
     @Value("${grant-type}")
     private String grantType;
+    @Value("${avatar_Path}")
+    private String avatarPath;
+
+
 
 
     @Autowired
@@ -352,6 +361,31 @@ public class UserService {
         return ResponseEntity.ok().build();
 
     }
+
+    public void saveAvatar(String userId, MultipartFile file) throws IOException {
+        //save file
+        String filename = userId + ".png";
+        Path filePath= Paths.get(avatarPath,filename);
+        file.transferTo(new File(filePath.toString()));
+        String fileLocation=filePath.toString();
+        //save path
+        Optional<UserEntity> user=userRepository.findByUserId(userId);
+        if(user.isPresent()) {
+            user.get().setAvatarPath(fileLocation);
+            userRepository.save(user.get());
+        }
+    }
+    public String getAvatarPath(String userId) {
+        Optional<UserEntity> user=userRepository.findByUserId(userId);
+        if(user.isPresent()) {
+            return user.get().getAvatarPath();
+
+        }
+        return null;
+    }
+
+
+
 
 
 }
