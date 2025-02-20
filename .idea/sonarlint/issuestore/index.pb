@@ -59,8 +59,6 @@ Sbackend springboot itam/src/main/java/com/project/repository/CompanyRepository.
 Xbackend springboot itam/src/main/java/com/project/controller/ManufacturerController.java,0/5/05b4757ebc15c11b0fda59a6dd8d8ad62ca41e6c
 €
 Pbackend springboot itam/src/main/java/com/project/controller/UserController.java,f/8/f887e35abb949fccac01beaf122e9b11e1d9502a
-€
-Pbackend springboot itam/src/main/java/com/project/controller/TestController.java,9/d/9d67a2618cc10766e165b4752a52d4bd6e615451
 u
 Ebackend springboot itam/src/main/java/com/project/util/CheckRole.java,7/b/7bfa1c23f3d11e99dc6b2b503ab3676fcb463aa9
 ~
