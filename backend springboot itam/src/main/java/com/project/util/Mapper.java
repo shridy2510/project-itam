@@ -4,6 +4,7 @@ import com.project.displayDto.AssetDisplayDto;
 import com.project.displayDto.AssetLogDisplayDto;
 import com.project.displayDto.ModelDisplayDto;
 import com.project.displayDto.UserDisplayDto;
+import com.project.dto.AssetDto;
 import com.project.dto.RoleDto;
 import com.project.repository.RoleRepository;
 import com.project.repository.entities.*;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ public class Mapper {
         ModelDisplayDto modelDisplayDto = new ModelDisplayDto();
         modelDisplayDto.setModel_number(modelEntity.getModel_number());
         modelDisplayDto.setName(modelEntity.getName());
+        modelDisplayDto.setId(modelEntity.getId());
         // trả về là name nếu khác null, nếu null trả về là null
         modelDisplayDto.setCategoryName(modelEntity.getCategoryEntity() != null ? modelEntity.getCategoryEntity().getName() : null);
         modelDisplayDto.setManufacturerName(modelEntity.getManufacturerEntity() != null ? modelEntity.getManufacturerEntity().getName() : null);
@@ -27,19 +30,47 @@ public class Mapper {
         return modelDisplayDto;
 
     }
+    public static Long calculateDueDuration(LocalDateTime expectedCheckin) {
+        if (expectedCheckin == null) {
+            return null;
+        }
+        long days = ChronoUnit.DAYS.between(expectedCheckin,LocalDateTime.now() );
+        return days;
+    }
+
     public static AssetDisplayDto toAssetDisplayDto (AssetEntity assetEntity){
         AssetDisplayDto assetDisplayDto = new AssetDisplayDto();
         assetDisplayDto.setAssetTag(assetEntity.getAssetTag());
         assetDisplayDto.setName(assetEntity.getName());
-        assetDisplayDto.setModelName(assetEntity.getModelEntity().getName());
-        assetDisplayDto.setCompanyName(assetEntity.getCompanyEntity().getName());
-        assetDisplayDto.setStatus(assetEntity.getStatusEntity().getName());
+        assetDisplayDto.setModelName(assetEntity.getModelEntity()!= null ? assetEntity.getModelEntity().getName() : null);
+        assetDisplayDto.setCompanyName(assetEntity.getCompanyEntity()!= null ? assetEntity.getCompanyEntity().getName() : null);
+        assetDisplayDto.setStatus(assetEntity.getStatusEntity()!= null ? assetEntity.getStatusEntity().getName() : null);
         assetDisplayDto.setAssignedUserName(assetEntity.getUserEntity() != null ? assetEntity.getUserEntity().getUsername() : null);
         assetDisplayDto.setDescription(assetEntity.getDescription());
         assetDisplayDto.setLastCheckout(assetEntity.getLastCheckout());
         assetDisplayDto.setExpectedCheckin(assetEntity.getExpectedCheckin());
+        assetDisplayDto.setId(assetEntity.getId());
+        assetDisplayDto.setSerial(assetEntity.getSerial());
+        assetDisplayDto.setCost(assetEntity.getCost());
+        long days= calculateDueDuration(assetEntity.getExpectedCheckin()!= null?assetEntity.getExpectedCheckin():LocalDateTime.now());
+        if(days>0){assetDisplayDto.setDueDuration(days);}
         return assetDisplayDto;
     }
+    public static AssetDto toAssetDto (AssetEntity assetEntity){
+        AssetDto assetDto = new AssetDto();
+        assetDto.setAssetTag(assetEntity.getAssetTag());
+        assetDto.setName(assetEntity.getName());
+        assetDto.setModel_id(assetEntity.getModelEntity()!= null ? assetEntity.getModelEntity().getId() : null);
+        assetDto.setCompany_id(assetEntity.getCompanyEntity()!= null ? assetEntity.getCompanyEntity().getId() : null);
+        assetDto.setStatus_id(assetEntity.getStatusEntity()!= null ? assetEntity.getStatusEntity().getId() : null);
+        assetDto.setAssignedUser_id(assetEntity.getUserEntity() != null ? assetEntity.getUserEntity().getId() : null);
+        assetDto.setDescription(assetEntity.getDescription());
+        assetDto.setLastCheckout(assetEntity.getLastCheckout());
+        assetDto.setExpectedCheckin(assetEntity.getExpectedCheckin());
+        assetDto.setId(assetEntity.getId());
+        assetDto.setSerial(assetEntity.getSerial());
+        assetDto.setCost(assetEntity.getCost());
+        return assetDto;}
     public static AssetLogDisplayDto toAssetLogDisplayDto (AssetLogEntity assetLogEntity){
         AssetLogDisplayDto assetLogDisplayDto = new AssetLogDisplayDto();
         assetLogDisplayDto.setAssetName(assetLogEntity.getAssetEntity().getName());
@@ -58,6 +89,7 @@ public class Mapper {
         userDisplayDto.setRoles(convertRolesToRoleNames(userEntity.getRoles()));
         userDisplayDto.setUserName(userEntity.getUsername());
         userDisplayDto.setPhoneNumber(userEntity.getPhoneNumber());
+        userDisplayDto.setId(userEntity.getId());
 
         return userDisplayDto;
 

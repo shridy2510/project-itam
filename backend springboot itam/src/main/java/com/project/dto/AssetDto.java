@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,11 +24,11 @@ public class AssetDto {
     private Long model_id;
     private Long company_id;
     private Long status_id;
-    private String assignedUser_id;
+    private Long assignedUser_id;
     private String description;
     private LocalDateTime lastCheckout;
     private LocalDateTime expectedCheckin;
-    private double cost;
+    private BigDecimal cost;
 }
 
 

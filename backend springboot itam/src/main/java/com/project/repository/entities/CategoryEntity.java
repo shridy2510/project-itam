@@ -1,5 +1,6 @@
 package com.project.repository.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class CategoryEntity {
     private String name;
     private String type;
     @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ModelEntity> modelEntities;
 
 }

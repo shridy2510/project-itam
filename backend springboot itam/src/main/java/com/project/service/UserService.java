@@ -383,6 +383,9 @@ public class UserService {
         }
         return null;
     }
+    public long getTotalUser(){
+        return userRepository.count();
+    }
 
 
 
