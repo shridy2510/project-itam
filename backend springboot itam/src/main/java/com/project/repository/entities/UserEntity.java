@@ -1,5 +1,6 @@
 package com.project.repository.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +33,13 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
     @OneToMany(mappedBy="userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<AssetEntity> assets;
     @OneToMany(mappedBy= "admin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<AssetLogEntity> assetLogAdmin;
     @OneToMany(mappedBy= "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<AssetLogEntity> assetLogUser;
 
     private String avatarPath;

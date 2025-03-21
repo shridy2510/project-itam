@@ -1,12 +1,10 @@
 package com.project.repository;
 
 import com.project.repository.entities.UserEntity;
-import org.jboss.resteasy.annotations.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -18,8 +16,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByUsername(String userName);
     Optional<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByUsername(String username);
-
-
 
 
 

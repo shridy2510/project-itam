@@ -158,6 +158,11 @@ public class UserController {
     public ResponseEntity<String> getAvatarPath(@RequestParam String UserId,HttpServletRequest request) {
         return ResponseEntity.ok(userService.getAvatarPath(UserId));
     }
+    @GetMapping("/total/users")
+    @PreAuthorize("hasRole('Admin')")
+    public long getTotalUsers() {
+        return userService.getTotalUser();
+    }
 
 
 

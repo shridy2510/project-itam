@@ -27,7 +27,7 @@ public class CategoryService {
     public void createCategory(CategoryDto categoryDto){
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName(categoryDto.getName());
-        categoryEntity.setType(categoryDto.getType());
+        if(categoryDto.getType()!=null){ categoryEntity.setType(categoryDto.getType());}
         categoryRepository.save(categoryEntity);
         System.out.println("Category saved");
     }

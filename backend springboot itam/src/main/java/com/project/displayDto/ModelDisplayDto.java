@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ModelDisplayDto {
+    private long id;
     private String name;
     private String categoryName;
     private String manufacturerName;

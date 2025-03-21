@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,6 @@ public class AssetEntity {
     private String name;
     private String assetTag;
     private String serial;
-    private double cost;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "model_id")
     private ModelEntity modelEntity;
@@ -39,6 +39,8 @@ public class AssetEntity {
     private LocalDateTime expectedCheckin;
     @OneToMany(mappedBy ="assetEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssetLogEntity> assetLogEntities;
+
+    private BigDecimal cost;
 
 
 
