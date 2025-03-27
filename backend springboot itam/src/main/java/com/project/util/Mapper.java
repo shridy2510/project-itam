@@ -1,9 +1,6 @@
 package com.project.util;
 
-import com.project.displayDto.AssetDisplayDto;
-import com.project.displayDto.AssetLogDisplayDto;
-import com.project.displayDto.ModelDisplayDto;
-import com.project.displayDto.UserDisplayDto;
+import com.project.displayDto.*;
 import com.project.dto.AssetDto;
 import com.project.dto.RoleDto;
 import com.project.repository.RoleRepository;
@@ -51,7 +48,9 @@ public class Mapper {
         assetDisplayDto.setExpectedCheckin(assetEntity.getExpectedCheckin());
         assetDisplayDto.setId(assetEntity.getId());
         assetDisplayDto.setSerial(assetEntity.getSerial());
+        assetDisplayDto.setDepartment(assetEntity.getDepartment());
         assetDisplayDto.setCost(assetEntity.getCost());
+        assetDisplayDto.setLocation(assetEntity.getLocation());
         long days= calculateDueDuration(assetEntity.getExpectedCheckin()!= null?assetEntity.getExpectedCheckin():LocalDateTime.now());
         if(days>0){assetDisplayDto.setDueDuration(days);}
         return assetDisplayDto;
@@ -70,6 +69,8 @@ public class Mapper {
         assetDto.setId(assetEntity.getId());
         assetDto.setSerial(assetEntity.getSerial());
         assetDto.setCost(assetEntity.getCost());
+        assetDto.setDepartment(assetEntity.getDepartment());
+        assetDto.setLocation(assetEntity.getLocation());
         return assetDto;}
     public static AssetLogDisplayDto toAssetLogDisplayDto (AssetLogEntity assetLogEntity){
         AssetLogDisplayDto assetLogDisplayDto = new AssetLogDisplayDto();
@@ -105,6 +106,28 @@ public class Mapper {
         roleEntity.setRole(roleEntity.getRole());
         return roleDto;
 
+    }
+    public static RequestedAssetDisplayDto toRequestedAssetDisplayDto (RequestedAssetEntity requestedAssetEntity){
+        RequestedAssetDisplayDto requestedAssetDisplayDto = new RequestedAssetDisplayDto();
+        requestedAssetDisplayDto.setAcceptTime(requestedAssetEntity.getAcceptTime());
+        requestedAssetDisplayDto.setActualCheckin(requestedAssetEntity.getActualCheckin());
+        requestedAssetDisplayDto.setDeniedTime(requestedAssetEntity.getDeniedTime());
+        requestedAssetDisplayDto.setId(requestedAssetEntity.getId());
+        requestedAssetDisplayDto.setAdminName(requestedAssetEntity.getAdminEntity()!= null ? requestedAssetEntity.getAdminEntity().getUsername() : null);
+        requestedAssetDisplayDto.setAssetTag(requestedAssetEntity.getAssetEntity().getAssetTag());
+        requestedAssetDisplayDto.setAssignedUserName(requestedAssetEntity.getUserEntity().getUsername());
+        requestedAssetDisplayDto.setStatus(requestedAssetEntity.getStatus());
+        requestedAssetDisplayDto.setRequestDate(requestedAssetEntity.getRequestDate());
+        requestedAssetDisplayDto.setModelName(requestedAssetEntity.getAssetEntity().getModelEntity()!= null ? requestedAssetEntity.getAssetEntity().getModelEntity().getName() : null);
+        requestedAssetDisplayDto.setName(requestedAssetEntity.getAssetEntity().getName());
+        requestedAssetDisplayDto.setExpectedCheckout(requestedAssetEntity.getExpectedCheckout());
+        requestedAssetDisplayDto.setExpectedCheckin(requestedAssetEntity.getExpectedCheckin());
+        requestedAssetDisplayDto.setLocation(requestedAssetEntity.getLocation());
+        requestedAssetDisplayDto.setUserId(requestedAssetEntity.getUserEntity().getId());
+        requestedAssetDisplayDto.setAssetId(requestedAssetEntity.getAssetEntity().getId());
+        requestedAssetDisplayDto.setRequestType(requestedAssetEntity.getRequestType());
+
+        return requestedAssetDisplayDto;
 
     }
 }

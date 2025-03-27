@@ -5,24 +5,24 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class AssetDisplayDto {
+public class RequestedAssetDisplayDto {
     private long id;
     private String assetTag;
     private String name;
-    private String serial;
     private String modelName;
-    private String companyName;
     private String status;
+    private LocalDateTime deniedTime;
     private String assignedUserName;
-    private String description;
-    private LocalDateTime lastCheckout;
     private LocalDateTime expectedCheckin;
-    private BigDecimal cost;
-    private long dueDuration;
-    private String department;
+    private LocalDateTime expectedCheckout;
+    private LocalDateTime actualCheckin;
+    private LocalDateTime acceptTime;
+    private LocalDateTime requestDate;
+    private String adminName;
     private String location;
-
+    private long assetId;
+    private long userId;
+    private String requestType;
 }

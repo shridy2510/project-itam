@@ -29,6 +29,8 @@ public class AssetDto {
     private LocalDateTime lastCheckout;
     private LocalDateTime expectedCheckin;
     private BigDecimal cost;
+    private String department;
+    private String location;
 }
 
 

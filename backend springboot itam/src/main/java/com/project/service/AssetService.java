@@ -33,6 +33,8 @@ public class AssetService {
     private ModelRepository modelRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RequestedAssetRepository requestedAssetRepository;
 
     public List<AssetDisplayDto> getAssetList(){
         List<AssetEntity> assets = assetRepository.findAll();
@@ -82,6 +84,8 @@ public class AssetService {
         assetEntity.setCost(assetDto.getCost());
         assetEntity.setLastCheckout(assetDto.getLastCheckout());
         assetEntity.setExpectedCheckin(assetDto.getExpectedCheckin());
+        assetEntity.setDepartment(assetDto.getDepartment());
+        assetEntity.setLocation(assetDto.getLocation());
         assetRepository.save(assetEntity);
         System.out.println("Asset saved");
 
@@ -116,6 +120,12 @@ public class AssetService {
             }
             if (assetDto.getExpectedCheckin() != null) {
                 assetEntity.setExpectedCheckin(assetDto.getExpectedCheckin());
+            }
+            if (assetDto.getDepartment() != null) {
+                assetEntity.setDepartment(assetDto.getDepartment());
+            }
+            if (assetDto.getLocation() != null) {
+                assetEntity.setLocation(assetDto.getLocation());
             }
 
             assetRepository.save(assetEntity);
@@ -190,13 +200,15 @@ public class AssetService {
         return count!= null? count: BigDecimal.valueOf(0);
     }
 
+
     public List<BigDecimal> countAlerts(){
         BigDecimal data1=this.countPastDueAssets();
         BigDecimal data2=this.countUnderRepairAssets();
         BigDecimal data3=this.countBrokenAssets();
         BigDecimal data4=this.countLostMissingAssets();
-        BigDecimal totalData=data1.add(data2.add(data3).add(data4));
-        return List.of(data1, data2, data3, data4,totalData);
+        BigDecimal data5= requestedAssetRepository.countPendingRequest();
+        BigDecimal totalData=data1.add(data2.add(data3).add(data4).add(data5));
+        return List.of(data1, data2, data3, data4,totalData,data5);
 
 
 

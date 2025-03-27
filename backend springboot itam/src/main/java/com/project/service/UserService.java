@@ -387,6 +387,14 @@ public class UserService {
         return userRepository.count();
     }
 
+    public long getIdFromUserId(String userId) {
+        Optional<Long> id =userRepository.findIdByUserId(userId);
+        if(id.isPresent()) {
+            return id.get();
+        }
+        return 0;
+    }
+
 
 
 

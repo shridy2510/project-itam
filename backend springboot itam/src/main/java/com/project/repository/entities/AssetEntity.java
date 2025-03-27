@@ -41,6 +41,8 @@ public class AssetEntity {
     private List<AssetLogEntity> assetLogEntities;
 
     private BigDecimal cost;
+    private String department;
+    private String location;
 
 
 
