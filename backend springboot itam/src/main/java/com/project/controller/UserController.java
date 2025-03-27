@@ -164,6 +164,12 @@ public class UserController {
         return userService.getTotalUser();
     }
 
+    @GetMapping("/id/user/get")
+    @PreAuthorize("hasRole('User')")
+    public long getIdUser(@RequestParam String userId,HttpServletRequest request) {
+        return userService.getIdFromUserId(userId);
+    }
+
 
 
 

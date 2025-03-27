@@ -4,7 +4,6 @@ import com.project.displayDto.AssetDisplayDto;
 import com.project.displayDto.BarChartDto;
 import com.project.displayDto.PieChartDto;
 import com.project.dto.AssetDto;
-import com.project.repository.entities.AssetEntity;
 import com.project.service.AssetService;
 import com.project.util.CheckRole;
 import com.project.util.Token;
@@ -61,7 +60,7 @@ public class AssetController {
 
     @DeleteMapping("/Asset/delete")
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<String> getList(HttpServletRequest request,@RequestParam long id){
+    public ResponseEntity<String> deleteList(HttpServletRequest request, @RequestParam long id){
     
             assetService.deleteAsset(id);
             return ResponseEntity.ok("delete asset successfully");
@@ -104,6 +103,7 @@ public class AssetController {
         String id=token.getUserIdFromToken(request);
         return ResponseEntity.ok(assetService.getAssetByUserId(id));
     }
+
     @GetMapping("/Asset/total/Available")
     @PreAuthorize("hasRole('Admin')")
     public long getTotalAvailableAssets() {
@@ -134,7 +134,7 @@ public class AssetController {
     }
 
     @GetMapping("/Asset/Available")
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('Admin') or hasRole('User')")
     public ResponseEntity<List<AssetDisplayDto>> getListAvailable(HttpServletRequest request){
         return ResponseEntity.ok(assetService.getAssetsAvailable());
     }

@@ -18,14 +18,22 @@ public class RequestedAssetEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "Asset_id")
     private AssetEntity assetEntity;
-    @Column(name="Created_at")
-    private LocalDateTime createTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name= "Admin_id")
+    private UserEntity adminEntity;
+    @Column(name="Request_Date")
+    private LocalDateTime requestDate;
     @Column(name="Accepted_at")
     private LocalDateTime acceptTime;
     @Column(name="Denied_at")
     private LocalDateTime deniedTime;
-    @Column(name="Updated_at")
-    private LocalDateTime updateTime;
+    @Column(name = "expected_checkin")
+    private LocalDateTime expectedCheckin;
+    private LocalDateTime expectedCheckout;
+    private LocalDateTime actualCheckin;
+    private String status;
+    private String location;
+    private String requestType;
 
 
 
