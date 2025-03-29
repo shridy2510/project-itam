@@ -31,6 +31,8 @@ public class AssetDto {
     private BigDecimal cost;
     private String department;
     private String location;
+    private String purchasedFrom;
+    private LocalDateTime purchaseDate;
 }
 
 

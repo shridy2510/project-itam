@@ -16,7 +16,7 @@ public class AssetLogEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="admin_id")
     private UserEntity admin;
-    private String actionType;
+    private String action;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
@@ -24,7 +24,8 @@ public class AssetLogEntity {
     @JoinColumn(name="asset_id")
     private AssetEntity assetEntity;
     //create at
-    private LocalDateTime timestamp;
+    private LocalDateTime created_at;
+
 
 
 }

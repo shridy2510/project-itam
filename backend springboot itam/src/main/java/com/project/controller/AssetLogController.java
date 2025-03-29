@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import com.project.displayDto.AssetLogDisplayDto;
+import com.project.dto.AssetDto;
 import com.project.dto.AssetLogDto;
 import com.project.repository.entities.AssetLogEntity;
 import com.project.service.AssetLogService;
@@ -22,17 +23,20 @@ public class AssetLogController {
     @GetMapping("/AssetLog/getList")
     @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<List<AssetLogDisplayDto>> getList(HttpServletRequest request){
-//        okif(checkRole.checkRoleAdmin(request)) {
             return ResponseEntity.ok(assetLogService.getAssetLogList());
-//        ok}
-////        else{
-////            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-////        }
 
     }
-
-
-
+    @GetMapping("/AssetLog/getListByAssetId")
+    @PreAuthorize("hasRole('Admin')")
+    public ResponseEntity<List<AssetLogDisplayDto>> getAssetById(
+            HttpServletRequest request, @RequestParam long id) {
+        List<AssetLogDisplayDto> asset = assetLogService.getAssetLogByAsset(id);
+        if (asset == null || asset.isEmpty()) {
+            return ResponseEntity.notFound().build(); // 404 Not Found if asset list is empty
+        }
+        return ResponseEntity.ok(asset);
+    }
+    
     @PostMapping("/AssetLog/create")
     @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<String> createAssetLog(HttpServletRequest request, @RequestBody AssetLogDto assetLogDto){
@@ -62,4 +66,6 @@ public class AssetLogController {
      
 
     }
+
+
 }

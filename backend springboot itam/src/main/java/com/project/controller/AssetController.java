@@ -43,12 +43,10 @@ public class AssetController {
 
     @PostMapping("/Asset/create")
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<String> createAsset(HttpServletRequest request, @RequestBody AssetDto assetDto){
+    public ResponseEntity<Long> createAsset(HttpServletRequest request, @RequestBody AssetDto assetDto){
     
-            assetService.createAsset(assetDto);
-            return ResponseEntity.ok("create asset successfully");
-     
-
+            Long id=assetService.createAsset(assetDto);
+            return ResponseEntity.ok(id);
     }
 
     @PutMapping("/Asset/update")

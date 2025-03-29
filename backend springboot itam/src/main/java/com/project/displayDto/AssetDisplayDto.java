@@ -17,6 +17,7 @@ public class AssetDisplayDto {
     private String companyName;
     private String status;
     private String assignedUserName;
+    private Long assignedUserId;
     private String description;
     private LocalDateTime lastCheckout;
     private LocalDateTime expectedCheckin;
@@ -24,5 +25,7 @@ public class AssetDisplayDto {
     private long dueDuration;
     private String department;
     private String location;
+    private String purchasedFrom;
+    private LocalDateTime purchaseDate;
 
 }

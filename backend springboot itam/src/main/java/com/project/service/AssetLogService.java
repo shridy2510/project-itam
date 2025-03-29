@@ -33,12 +33,19 @@ public class AssetLogService {
                 .map(Mapper::toAssetLogDisplayDto)
                 .collect(Collectors.toList());
     }
+    public List<AssetLogDisplayDto> getAssetLogByAsset(long id){
+        List<AssetLogEntity> assetLogs = assetLogRepository.findAssetLogsByAssetId(id);
+        return assetLogs.stream()
+                .map(Mapper::toAssetLogDisplayDto)
+                .collect(Collectors.toList());
+    }
+
     public void createAssetLog(AssetLogDto assetLogDto){
         AssetLogEntity assetLogEntity = new AssetLogEntity();
         Optional<AssetEntity> assetEntityOptional = assetRepository.findById(assetLogDto.getAsset_id());
         Optional<UserEntity> adminOptional = userRepository.findByUserId(assetLogDto.getAdmin_id());
         if(assetLogDto.getUser_id()!=null){
-        Optional<UserEntity> userOptional =userRepository.findByUserId(assetLogDto.getUser_id());
+        Optional<UserEntity> userOptional =userRepository.findById(assetLogDto.getUser_id());
         if(userOptional.isPresent()){
             UserEntity user = userOptional.get();
             assetLogEntity.setUser(user);
@@ -47,16 +54,13 @@ public class AssetLogService {
         if(adminOptional.isPresent()&&assetEntityOptional.isPresent()){
             UserEntity admin= adminOptional.get();
             AssetEntity assetEntity= assetEntityOptional.get();
-            assetLogEntity.setTimestamp(LocalDateTime.now());
-            assetLogEntity.setActionType(assetLogDto.getAction());
+            assetLogEntity.setCreated_at(LocalDateTime.now());
+            assetLogEntity.setAction(assetLogDto.getAction());
             assetLogEntity.setAdmin(admin);
             assetLogEntity.setAssetEntity(assetEntity);
             assetLogRepository.save(assetLogEntity);
             System.out.println("AssetLog create");
         }
-
-
-
     }
 
 
@@ -67,7 +71,7 @@ public class AssetLogService {
         if(assetLogOptional.isPresent()){
             AssetLogEntity assetLogEntity = assetLogOptional.get();
             if(assetLogDto.getUser_id()!=null){
-                Optional<UserEntity> userOptional =userRepository.findByUserId(assetLogDto.getUser_id());
+                Optional<UserEntity> userOptional =userRepository.findById(assetLogDto.getUser_id());
                 if(userOptional.isPresent()){
                     UserEntity user = userOptional.get();
                     assetLogEntity.setUser(user);
@@ -76,8 +80,8 @@ public class AssetLogService {
             if(adminOptional.isPresent()&&assetEntityOptional.isPresent()){
                 UserEntity admin= adminOptional.get();
                 AssetEntity assetEntity= assetEntityOptional.get();
-                assetLogEntity.setTimestamp(LocalDateTime.now());
-                assetLogEntity.setActionType(assetLogDto.getAction());
+                assetLogEntity.setCreated_at(LocalDateTime.now());
+                assetLogEntity.setAction(assetLogDto.getAction());
                 assetLogEntity.setAdmin(admin);
                 assetLogEntity.setAssetEntity(assetEntity);
                 assetLogRepository.save(assetLogEntity);
