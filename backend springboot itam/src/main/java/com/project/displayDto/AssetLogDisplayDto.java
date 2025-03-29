@@ -13,12 +13,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AssetLogDisplayDto {
+    private Long id;
     private String assetName;
     private String adminName;
     private String userName;
     private String action;
     //create at
-    private LocalDateTime timestamp;
+    private LocalDateTime created_at;
 
 
 

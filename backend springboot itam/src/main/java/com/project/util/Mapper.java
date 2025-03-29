@@ -47,10 +47,13 @@ public class Mapper {
         assetDisplayDto.setLastCheckout(assetEntity.getLastCheckout());
         assetDisplayDto.setExpectedCheckin(assetEntity.getExpectedCheckin());
         assetDisplayDto.setId(assetEntity.getId());
+        assetDisplayDto.setAssignedUserId(assetEntity.getUserEntity() != null ? assetEntity.getUserEntity().getId() : null);
         assetDisplayDto.setSerial(assetEntity.getSerial());
         assetDisplayDto.setDepartment(assetEntity.getDepartment());
         assetDisplayDto.setCost(assetEntity.getCost());
         assetDisplayDto.setLocation(assetEntity.getLocation());
+        assetDisplayDto.setPurchaseDate(assetEntity.getPurchaseDate());
+        assetDisplayDto.setPurchasedFrom(assetEntity.getPurchasedFrom());
         long days= calculateDueDuration(assetEntity.getExpectedCheckin()!= null?assetEntity.getExpectedCheckin():LocalDateTime.now());
         if(days>0){assetDisplayDto.setDueDuration(days);}
         return assetDisplayDto;
@@ -71,14 +74,17 @@ public class Mapper {
         assetDto.setCost(assetEntity.getCost());
         assetDto.setDepartment(assetEntity.getDepartment());
         assetDto.setLocation(assetEntity.getLocation());
+        assetDto.setPurchaseDate(assetEntity.getPurchaseDate());
+        assetDto.setPurchasedFrom(assetEntity.getPurchasedFrom());
         return assetDto;}
     public static AssetLogDisplayDto toAssetLogDisplayDto (AssetLogEntity assetLogEntity){
         AssetLogDisplayDto assetLogDisplayDto = new AssetLogDisplayDto();
         assetLogDisplayDto.setAssetName(assetLogEntity.getAssetEntity().getName());
-        assetLogDisplayDto.setAction(assetLogEntity.getActionType());
+        assetLogDisplayDto.setAction(assetLogEntity.getAction());
         assetLogDisplayDto.setAdminName(assetLogEntity.getAdmin().getUsername());
         assetLogDisplayDto.setUserName(assetLogEntity.getUser()!=null ? assetLogEntity.getUser().getUsername() : null);
-        assetLogDisplayDto.setTimestamp(assetLogEntity.getTimestamp());
+        assetLogDisplayDto.setCreated_at(assetLogEntity.getCreated_at());
+        assetLogDisplayDto.setId(assetLogEntity.getId());
         return assetLogDisplayDto;
     }
     public static UserDisplayDto toUserDisplayDto (UserEntity userEntity){

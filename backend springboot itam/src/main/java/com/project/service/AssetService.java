@@ -46,7 +46,7 @@ public class AssetService {
         assetRepository.findAllNames();
         return assetRepository.findAllNames();
     }
-    public void createAsset(AssetDto assetDto){
+    public Long createAsset(AssetDto assetDto){
         AssetEntity assetEntity = new AssetEntity();
 // Company
         if (assetDto.getCompany_id() != null) {
@@ -86,8 +86,11 @@ public class AssetService {
         assetEntity.setExpectedCheckin(assetDto.getExpectedCheckin());
         assetEntity.setDepartment(assetDto.getDepartment());
         assetEntity.setLocation(assetDto.getLocation());
+        assetEntity.setPurchaseDate(assetDto.getPurchaseDate());
+        assetEntity.setPurchasedFrom(assetDto.getPurchasedFrom());
         assetRepository.save(assetEntity);
         System.out.println("Asset saved");
+        return assetEntity.getId();
 
 
     }
